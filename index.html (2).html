@@ -10,7 +10,6 @@
     --gold: #C9A84C;
     --gold-light: #F0D080;
     --navy: #0A0E1A;
-    --navy-mid: #111827;
     --teal: #0E7B6E;
     --teal-light: #14A898;
     --white: #F5F5F0;
@@ -18,998 +17,569 @@
     --card-bg: rgba(255,255,255,0.04);
     --border: rgba(201,168,76,0.2);
   }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'IBM Plex Sans Arabic',sans-serif; background:var(--navy); color:var(--white); min-height:100vh; overflow-x:hidden; }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  nav { position:fixed; top:0; left:0; right:0; z-index:200; padding:14px 32px; background:rgba(10,14,26,0.9); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; }
+  .logo-text { font-size:14px; font-weight:600; color:var(--gold); line-height:1.3; flex-shrink:0; }
+  .logo-text span { font-weight:300; color:var(--white); font-size:11px; display:block; }
+  .tabs { display:flex; gap:4px; flex-wrap:wrap; justify-content:center; flex:1; }
+  .tab-btn { background:none; border:1px solid transparent; color:var(--muted); font-family:'IBM Plex Sans Arabic',sans-serif; font-size:11.5px; font-weight:500; padding:7px 12px; border-radius:6px; cursor:pointer; transition:all 0.25s; white-space:nowrap; }
+  .tab-btn:hover { color:var(--white); background:rgba(255,255,255,0.07); }
+  .tab-btn.active { color:var(--gold); background:rgba(201,168,76,0.12); border-color:rgba(201,168,76,0.3); }
 
-  body {
-    font-family: 'IBM Plex Sans Arabic', sans-serif;
-    background: var(--navy);
-    color: var(--white);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+  .page { display:none; min-height:100vh; }
+  .page.active { display:block; }
 
-  /* ── NAV ── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    padding: 14px 32px;
-    background: rgba(10,14,26,0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
+  .hero { padding:120px 48px 50px; position:relative; overflow:hidden; }
+  .hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 70% 60% at 20% 30%,rgba(14,123,110,0.18) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 80% 70%,rgba(201,168,76,0.1) 0%,transparent 60%); pointer-events:none; }
+  .hero-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(201,168,76,0.1); border:1px solid rgba(201,168,76,0.35); border-radius:20px; padding:5px 14px; font-size:11px; color:var(--gold); font-weight:500; margin-bottom:20px; }
+  .hero-badge::before { content:'●'; font-size:7px; animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
+  .package-title { font-size:clamp(32px,5vw,54px); font-weight:700; line-height:1.15; margin-bottom:12px; background:linear-gradient(135deg,#fff 0%,var(--gold-light) 60%,var(--gold) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .price-row { display:flex; align-items:center; gap:16px; margin-bottom:10px; flex-wrap:wrap; }
+  .price-current { font-size:clamp(28px,4vw,44px); font-weight:700; color:var(--gold); }
+  .price-original { font-size:18px; color:var(--muted); text-decoration:line-through; }
+  .discount-badge { background:linear-gradient(135deg,var(--teal),var(--teal-light)); border-radius:8px; padding:4px 12px; font-size:12px; font-weight:600; color:#fff; }
+  .duration-tag { display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:6px 14px; font-size:13px; color:var(--muted); margin-bottom:40px; }
+  .duration-tag span { color:var(--white); font-weight:600; }
 
-  .logo-wrap {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-  }
+  .services-grid { padding:0 48px 60px; display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; }
+  .service-card { background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:28px; position:relative; overflow:hidden; cursor:pointer; transition:transform 0.2s,border-color 0.2s,box-shadow 0.2s; }
+  .service-card:hover { transform:translateY(-4px); border-color:rgba(201,168,76,0.6); box-shadow:0 8px 32px rgba(201,168,76,0.1); }
+  .service-card::before { content:''; position:absolute; top:0; right:0; width:80px; height:80px; background:radial-gradient(circle,rgba(201,168,76,0.1) 0%,transparent 70%); border-radius:0 16px 0 80px; }
+  .service-icon { font-size:26px; margin-bottom:14px; display:block; }
+  .service-name { font-size:15px; font-weight:700; color:var(--gold-light); margin-bottom:10px; padding-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.06); }
+  .service-preview { font-size:12px; color:rgba(255,255,255,0.6); line-height:1.7; }
+  .service-tap-hint { display:inline-flex; align-items:center; gap:5px; margin-top:14px; font-size:11px; color:rgba(201,168,76,0.8); font-weight:500; border:1px solid rgba(201,168,76,0.25); border-radius:20px; padding:4px 11px; background:rgba(201,168,76,0.05); }
 
-  .logo-wrap img {
-    height: 42px;
-    width: 42px;
-    object-fit: contain;
-    border-radius: 6px;
-  }
+  .result-banner { margin:0 48px 60px; background:linear-gradient(135deg,rgba(14,123,110,0.2) 0%,rgba(201,168,76,0.1) 100%); border:1px solid rgba(201,168,76,0.3); border-radius:16px; padding:24px 32px; display:flex; align-items:center; gap:16px; }
+  .result-icon { font-size:32px; flex-shrink:0; }
+  .result-text { font-size:15px; font-weight:600; color:var(--gold-light); line-height:1.7; }
 
-  .logo-text {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--gold);
-    letter-spacing: 0.5px;
-    line-height: 1.3;
-  }
+  .cover { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:80px 48px; position:relative; overflow:hidden; }
+  .cover::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(14,123,110,0.2) 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 20% 80%,rgba(201,168,76,0.08) 0%,transparent 50%); }
+  .cover-grid { position:absolute; inset:0; background-image:linear-gradient(rgba(201,168,76,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.04) 1px,transparent 1px); background-size:60px 60px; mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 80%); }
+  .cover-title { font-size:clamp(42px,7vw,80px); font-weight:700; background:linear-gradient(135deg,#fff 0%,var(--gold-light) 60%,var(--gold) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:16px; position:relative; }
+  .cover-sub { font-size:16px; color:var(--muted); font-weight:300; margin-bottom:48px; position:relative; }
+  .packages-overview { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; width:100%; max-width:900px; position:relative; }
+  .overview-card { background:var(--card-bg); border:1px solid var(--border); border-radius:12px; padding:20px 16px; cursor:pointer; transition:all 0.25s; text-align:center; }
+  .overview-card:hover { border-color:rgba(201,168,76,0.5); background:rgba(201,168,76,0.07); transform:translateY(-4px); }
+  .ov-icon { font-size:28px; margin-bottom:10px; display:block; }
+  .ov-name { font-size:13px; font-weight:600; color:var(--gold-light); margin-bottom:4px; }
+  .ov-price { font-size:11px; color:var(--muted); }
 
-  .logo-text span { font-weight: 300; color: var(--white); font-size: 11px; display: block; }
+  .bg-lines { position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none; }
+  .bg-lines::after { content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:repeating-linear-gradient(-45deg,transparent,transparent 80px,rgba(201,168,76,0.012) 80px,rgba(201,168,76,0.012) 81px); }
 
-  .tabs {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-    justify-content: center;
-    flex: 1;
-  }
+  /* MODAL */
+  .modal-overlay { position:fixed; inset:0; z-index:999; background:rgba(5,8,18,0.88); backdrop-filter:blur(14px); display:none; align-items:center; justify-content:center; padding:20px; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:linear-gradient(145deg,#0e1628 0%,#080c18 100%); border:1px solid rgba(201,168,76,0.3); border-radius:24px; width:100%; max-width:700px; max-height:90vh; overflow-y:auto; padding:44px 40px; position:relative; animation:slideUp 0.3s ease; }
+  @keyframes slideUp { from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1} }
+  .modal::-webkit-scrollbar { width:4px; }
+  .modal::-webkit-scrollbar-thumb { background:rgba(201,168,76,0.3); border-radius:2px; }
+  .modal-close { position:absolute; top:18px; left:18px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:var(--white); width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:17px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+  .modal-close:hover { background:rgba(201,168,76,0.15); border-color:rgba(201,168,76,0.4); color:var(--gold); }
+  .modal-header { margin-bottom:32px; padding-bottom:22px; border-bottom:1px solid rgba(255,255,255,0.07); }
+  .modal-icon-big { font-size:44px; display:block; margin-bottom:14px; }
+  .modal-title { font-size:26px; font-weight:700; background:linear-gradient(135deg,#fff 0%,var(--gold-light) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:8px; }
+  .modal-subtitle { font-size:13px; color:rgba(255,255,255,0.5); line-height:1.6; }
+  .modal-section { margin-bottom:28px; }
+  .modal-section-title { font-size:11px; font-weight:700; color:var(--teal-light); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:14px; display:flex; align-items:center; gap:10px; }
+  .modal-section-title::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,rgba(20,168,152,0.3),transparent); }
+  .modal-items { list-style:none; display:flex; flex-direction:column; gap:9px; }
+  .modal-items li { display:flex; align-items:flex-start; gap:12px; padding:13px 16px; background:rgba(255,255,255,0.025); border-radius:10px; border:1px solid rgba(255,255,255,0.05); transition:background 0.15s,border-color 0.15s; }
+  .modal-items li:hover { background:rgba(201,168,76,0.05); border-color:rgba(201,168,76,0.15); }
+  .modal-items li .chk { color:var(--teal-light); font-size:12px; margin-top:3px; flex-shrink:0; font-weight:700; }
+  .modal-items li .itxt strong { display:block; color:var(--white); font-weight:600; font-size:13.5px; margin-bottom:3px; }
+  .modal-items li .itxt span { color:rgba(255,255,255,0.5); font-size:12px; line-height:1.6; }
 
-  .tab-btn {
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-family: 'IBM Plex Sans Arabic', sans-serif;
-    font-size: 11.5px;
-    font-weight: 500;
-    padding: 7px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.25s;
-    white-space: nowrap;
-  }
-
-  .tab-btn:hover { color: var(--white); background: rgba(255,255,255,0.07); }
-  .tab-btn.active {
-    color: var(--gold);
-    background: rgba(201,168,76,0.12);
-    border: 1px solid rgba(201,168,76,0.3);
-  }
-
-  /* ── PAGES ── */
-  .page { display: none; min-height: 100vh; }
-  .page.active { display: block; }
-
-  /* ── HERO AREA ── */
-  .hero {
-    padding: 120px 48px 60px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 70% 60% at 20% 30%, rgba(14,123,110,0.18) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 50% at 80% 70%, rgba(201,168,76,0.1) 0%, transparent 60%);
-    pointer-events: none;
-  }
-
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(201,168,76,0.1);
-    border: 1px solid rgba(201,168,76,0.35);
-    border-radius: 20px;
-    padding: 5px 14px;
-    font-size: 11px;
-    color: var(--gold);
-    font-weight: 500;
-    margin-bottom: 20px;
-    letter-spacing: 0.5px;
-  }
-
-  .hero-badge::before { content: '●'; font-size: 7px; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
-  .package-title {
-    font-size: clamp(32px, 5vw, 54px);
-    font-weight: 700;
-    line-height: 1.15;
-    margin-bottom: 12px;
-    background: linear-gradient(135deg, #fff 0%, var(--gold-light) 60%, var(--gold) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .price-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 10px;
-    flex-wrap: wrap;
-  }
-
-  .price-current {
-    font-size: clamp(28px, 4vw, 44px);
-    font-weight: 700;
-    color: var(--gold);
-  }
-
-  .price-original {
-    font-size: 18px;
-    color: var(--muted);
-    text-decoration: line-through;
-  }
-
-  .discount-badge {
-    background: linear-gradient(135deg, var(--teal), var(--teal-light));
-    border-radius: 8px;
-    padding: 4px 12px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #fff;
-  }
-
-  .duration-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    padding: 6px 14px;
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 40px;
-  }
-
-  .duration-tag span { color: var(--white); font-weight: 600; }
-
-  /* ── SERVICES GRID ── */
-  .services-grid {
-    padding: 0 48px 60px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-  }
-
-  .service-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.2s, border-color 0.2s;
-  }
-
-  .service-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(201,168,76,0.45);
-  }
-
-  .service-card::before {
-    content: '';
-    position: absolute;
-    top: 0; right: 0;
-    width: 80px; height: 80px;
-    background: radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 70%);
-    border-radius: 0 16px 0 80px;
-  }
-
-  .service-icon {
-    font-size: 26px;
-    margin-bottom: 14px;
-    display: block;
-  }
-
-  .service-name {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--gold-light);
-    margin-bottom: 14px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-
-  .service-items { list-style: none; }
-
-  .service-items li {
-    font-size: 13px;
-    color: rgba(255,255,255,0.75);
-    padding: 6px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    line-height: 1.5;
-  }
-
-  .service-items li:last-child { border-bottom: none; }
-  .service-items li::before { content: '✓'; color: var(--teal-light); font-size: 11px; margin-top: 2px; flex-shrink: 0; font-weight: 700; }
-
-  /* ── RESULT BANNER ── */
-  .result-banner {
-    margin: 0 48px 60px;
-    background: linear-gradient(135deg, rgba(14,123,110,0.2) 0%, rgba(201,168,76,0.1) 100%);
-    border: 1px solid rgba(201,168,76,0.3);
-    border-radius: 16px;
-    padding: 24px 32px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .result-icon { font-size: 32px; flex-shrink: 0; }
-
-  .result-text {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--gold-light);
-    line-height: 1.7;
-  }
-
-  /* ── SIMPLE PACKAGE (no breakdown) ── */
-  .compact-services {
-    padding: 0 48px 40px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .compact-chip {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 30px;
-    padding: 10px 20px;
-    font-size: 13px;
-    font-weight: 500;
-    transition: all 0.2s;
-  }
-
-  .compact-chip:hover { border-color: rgba(201,168,76,0.5); background: rgba(201,168,76,0.07); }
-  .compact-chip::before { content: '✦'; color: var(--gold); font-size: 9px; }
-
-  /* ── DIVIDER ── */
-  .section-divider {
-    margin: 0 48px 32px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), transparent);
-  }
-
-  /* ── COVER PAGE ── */
-  .cover {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 80px 48px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .cover::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(14,123,110,0.2) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 80% at 20% 80%, rgba(201,168,76,0.08) 0%, transparent 50%),
-      radial-gradient(ellipse 50% 50% at 80% 10%, rgba(201,168,76,0.07) 0%, transparent 50%);
-  }
-
-  .cover-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
-  }
-
-  .cover-logo {
-    width: 120px;
-    height: 120px;
-    object-fit: contain;
-    border-radius: 20px;
-    box-shadow: 0 0 60px rgba(201,168,76,0.2), 0 0 120px rgba(14,123,110,0.1);
-    margin-bottom: 32px;
-    position: relative;
-  }
-
-  .cover-title {
-    font-size: clamp(42px, 7vw, 80px);
-    font-weight: 700;
-    background: linear-gradient(135deg, #fff 0%, var(--gold-light) 60%, var(--gold) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 16px;
-    position: relative;
-  }
-
-  .cover-sub {
-    font-size: 16px;
-    color: var(--muted);
-    font-weight: 300;
-    margin-bottom: 48px;
-    position: relative;
-  }
-
-  .packages-overview {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 12px;
-    width: 100%;
-    max-width: 900px;
-    position: relative;
-  }
-
-  .overview-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 16px;
-    cursor: pointer;
-    transition: all 0.25s;
-    text-align: center;
-  }
-
-  .overview-card:hover {
-    border-color: rgba(201,168,76,0.5);
-    background: rgba(201,168,76,0.07);
-    transform: translateY(-4px);
-  }
-
-  .ov-icon { font-size: 28px; margin-bottom: 10px; display: block; }
-  .ov-name { font-size: 13px; font-weight: 600; color: var(--gold-light); margin-bottom: 4px; }
-  .ov-price { font-size: 11px; color: var(--muted); }
-
-  /* ── SCROLL LINES BG ── */
-  .bg-lines {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  .bg-lines::after {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: repeating-linear-gradient(
-      -45deg,
-      transparent,
-      transparent 80px,
-      rgba(201,168,76,0.012) 80px,
-      rgba(201,168,76,0.012) 81px
-    );
-  }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 768px) {
-    .hero, .services-grid, .result-banner, .compact-services, .section-divider { padding-left: 20px; padding-right: 20px; }
-    .result-banner, .section-divider { margin-left: 20px; margin-right: 20px; }
-    nav { padding: 12px 16px; }
-    .tabs { gap: 2px; }
-    .tab-btn { font-size: 10px; padding: 6px 8px; }
-    .cover { padding: 80px 24px; }
+  @media(max-width:768px){
+    .hero,.services-grid,.result-banner { padding-left:20px; padding-right:20px; }
+    .result-banner { margin-left:20px; margin-right:20px; }
+    nav { padding:12px 16px; flex-wrap:wrap; }
+    .tabs { gap:2px; }
+    .tab-btn { font-size:10px; padding:5px 7px; }
+    .cover { padding:80px 20px; }
+    .modal { padding:28px 18px; }
   }
 </style>
 </head>
 <body>
-
 <div class="bg-lines"></div>
 
-<!-- NAV -->
 <nav>
-  <div class="logo-wrap">
-    <img src="data:image/jpeg;base64,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" alt="Al-ahly Agency" onerror="this.style.display='none'">
-    <div class="logo-text">
-      Al-ahly Agency
-      <span>Digital Marketing Solutions</span>
-    </div>
-  </div>
-  <div class="tabs" id="tabs">
-    <button class="tab-btn active" onclick="showPage('cover', this)">الرئيسية</button>
-    <button class="tab-btn" onclick="showPage('p1', this)">الانطلاقة</button>
-    <button class="tab-btn" onclick="showPage('p2', this)">الربح</button>
-    <button class="tab-btn" onclick="showPage('p3', this)">القمة</button>
-    <button class="tab-btn" onclick="showPage('p4', this)">التميز</button>
-    <button class="tab-btn" onclick="showPage('p5', this)">النخبة</button>
-    <button class="tab-btn" onclick="showPage('p6', this)">الهوية البصرية</button>
-    <button class="tab-btn" onclick="showPage('p7', this)">تحسين الموقع</button>
+  <div class="logo-text">Al-ahly Agency<span>Digital Marketing</span></div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showPage('cover',this)">الرئيسية</button>
+    <button class="tab-btn" onclick="showPage('p1',this)">الانطلاقة</button>
+    <button class="tab-btn" onclick="showPage('p2',this)">الربح</button>
+    <button class="tab-btn" onclick="showPage('p3',this)">القمة</button>
+    <button class="tab-btn" onclick="showPage('p4',this)">التميز</button>
+    <button class="tab-btn" onclick="showPage('p5',this)">النخبة</button>
+    <button class="tab-btn" onclick="showPage('p6',this)">الهوية البصرية</button>
+    <button class="tab-btn" onclick="showPage('p7',this)">تحسين الموقع</button>
   </div>
 </nav>
 
-<!-- ══════ COVER ══════ -->
+<!-- COVER -->
 <div class="page active" id="cover">
   <div class="cover">
     <div class="cover-grid"></div>
-    <img class="cover-logo" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAJUAmEDASIAAhEBAxEB/8QAHQAAAgEFAQEAAAAAAAAAAAAAAAECAwQFCAkHBv/EAGQQAAECBAIFBgYHEQ4FAwQCAwEAAgMEBREGEgcTIVGRCBQxQVJhIjJxgZKhCRVCU2KC0RYXGCNDVFdjcnWUorGztOHwJCYzNTY3RFZ2lbLB0tMlNHODk0VVdDhkpMKE8ZbE4v/EABoBAQEBAQEBAQAAAAAAAAAAAAABAgMEBQb/xAAvEQEAAgEDBAAFAwMFAQAAARECAxIhBBMxURQiMkFhIzNSBUKhFXGBkfCx/9oADAMBAAIRAxEAPwDT1OyaF+oecrIsmhArIsmhArIsmhBFCkhBFCkhBFCkhBFCkhBFCkhBFCkhBFCkhBFCZRZAkJ2TQRQnZFkCQnZFkCQhCAQhCAQhCAQhCAQhCtgQhCAQhCBpIQgEIQoBCEIBCEIBCEIBCEIBCEIJDoQki6BoSui6BoSui6BoSui6BoSui6BoSui6BoQhAIQhAXRdCV9qlh3RdCEsF0XQhLBdF0IQF0XQhAXRdCEBdK6aLIFdO6VkWQNCEKgQhCAQhCAQhCAQhCAQhCAQhCAQhCAQhCAsiyEICyVk0IFZFtiaEEUJ2TsgSSkhBFCkhBFCZSQCEIQCEIQCEIQCEIQCEIQCEIQCEIQCEIQCEIQCEIQCEIQCEIRQhCEKMIukhEO6EkIHZFlKyLLNpaKSkQiyWtooUrIsliKE7I8yWEhNOyWIoUrIsliKFKyVkAE0rI2qhoRtRtSwIRtRtVsCEbUKWBCEJYEIS2pYaErlFyrYaErlF0sNCVyi6WGhK6AUDQhCAQhCAQhCAQhCAQhCAQhCASBRtRZAdaLoRZA0FRTuUBZJMIKAshAKaCKEyiyBIUrIsgihNJAIQhAIQhAIQhAIQhAIQhAIQhAIQhAIQhBUQmhc7ZskJ2RZLLRsiydkWVCsiydkII2QpIQRQpIRUUJ2RZAkJ2RZAkJ2SSywhCEssIQhLLCEISwIQhCwhCEssIshCWthKyaEsKyLJoVAldNCthXRdXlLkXz0eI0EMhQYT48aI7YGMaL9PRcmzWg9LnNHWrRLCui6aEsK6LpoSwrouiySWHdF0kJYd0XSQlh3RdJCWHsRZJMFAWRZNCBIumhAii6CiyWC6Loskqp7EbEkKJRoSQimkhCAQhCWgQhCWBCE0CQmmFRFCdkIEhCEFVCkhcnO0UKSELRQpJWQskJ2RZCyRZOyNqWtlZFkIViQrIsmhLLJCaEtbJCaEsskJoSyySUrJWQKyLJoVCsqsrLxpuahSstDdEjRnthw2N6XOJsAPOqazGBv5bUL75S/5xqkzUK+k+cvpZ+x3iX8Af8AIj5y+ln7HeJfwB/yLqahfL/1DP1Dr24csvnL6Wfsd4l/AH/Ij5y+ln7HeJfwB/yLqahP9Qz9Hbhyy+cvpZ+x3iX8AifIj5y+ln7HeJfwCJ8i6moT/UM/R24csvnL6Wfsd4l/AInyI+cvpZ+x3iX8AifIunGJMSYew1Kc7xDXKbSYFiQ+cmWQgbbsxFz3BeSYj5VWh2kRXwoFZnqu9nSJCSe4X3Bz8jT5QbLePWauf042k4RH3aRfOX0s/Y7xL+ARPkXzeLMKYkwlNwZPE1EnaRMxoeshwZuEYb3MvbMGnba4Iv3HctyxBlqYMY53MMH1+OPcmPEgwr8HOstd6rUKryheUPBivhPk4VUmGQmw8+YSUlDF3HNbqYHOJ2AuJ3r0aerqzznjUMzEfZ8hWIHzOYGkKfctqNfY2fnLEhzJQOIgQj3PcDGINwQIB2FqvJfQ7pUmZeHMQNH2I4kKKwPY9sg8hzSLgjZuVvX8TUqr6WImI6nT3TVEZPsLJCE/Lmk4VmwoAJvYatjGXt0dS2h+japf2PZz+82/7aueWrjEbMbIqfLWr5y+ln7HeJfwCJ8iPnL6Wfsd4l/AInyLZX6Nul/Y9nP7zb/to+jbpf2PZz+9G/7a593qP4LWPtrV85fSz9jvEv4BE+RHzl9LP2O8S/gET5Fsp9G5S/sezn96N/20fRuUv7Hs5/ejf9tO71H8CsfbWv5y+ln7HeJfwCJ8iPnL6Wfsd4l/AInyLZT6Nyl/Y9nP70b/ALaPo3KX9j2c/vRv+2nd6n+C1j7a1/OX0s/Y7xL+ARPkR85fSz9jvEv4BE+RbKfRuUv7Hs5/ejf9tH0blL+x7Of3o3/bTu9T/BKx9tavnLaWfsdYl/AInyI+ctpZ+x1iX8AifItlfo3KX9j2c/vRv+2j6Nyl/Y9nP70b/tq93qf4LWPtrUdC+ln7HWJfwCJ8iXzl9LP2OsS/3fE+RbLfRuUv7Hs5/ejf9tH0blL+x7Of3o3/AG07vU/wKx9tavnLaWfsdYl/u+J8i+Gm5eNKTUWVmIbocaC90OIx3S1wNiD511D5P2lKX0uYNm8SS9Gi0lktUXyJgxI4ilxbDhvzXDR75a1upc0cc/y1rv3ymPzjlvQ189TKccoqkyiIYZJSQvUyimgdKLIAFO6RSQSSQi6AQi6OlAkKSVktbJCdkWSyyQhCAQhCAQhCAQhCoE0kIBCaEFYJ3VTKEi1cbcNynsRZVMiWRLLQsiyllKLFC0bIspWKSpZITRsRSQnsRZLLJKylZBCtlo2R1JoRbRQpIQtFCkkhZITsiyKSEIQCzGB/5a0L74y/5xqw6zOB/wCWtC++Mv8AnGqT4Idb0IQvzr1hCF4BynuURIaNmxMNYa5vUcVvZeIHeFCkGkbHRLdLzsIZusTsIDt4aeWpO3FJmI5l6dpS0l4P0bUf2xxTVWS7nj6RKw/DmJg7mM6T5TYDrIWm2lXlb44xGYslhCXh4Xp5JAitIizbx3vIys+KLjevBcU4hreKK3HrWIanM1KoRzeJHjvu47gOoAdQFgOpYtfV0ejww5y5lxy1Jnwu61VqpWp99QrFSnKjNxPHjzUZ0V7vK5xJVmiyLL2QwFsLya6YcPaGdKOlGMzJEgUp9Hp0Ut8WLFAD3NO8F8EbN5WvW1biaWqM3AXIPoNCy6qYq0eUiTQ63RYpMyQe8ZA34oXDqMuIx9y1j7adXQmhehkJFNCCJQpJWQJCEJahCEIBCEIBCEJQ239jr/mTrH9o4/6NLLSHHP8ALau/fKY/OOW73sdf8ydY/tHH/RpZaQ45/ltXfvlMfnHLx6H72o3l4hhkIQvawEIQihCEIBCEIFZFk0IEhNCBFNBS2oGhLamFKAi6EIBCEJQEIQqBBQhSwrITQljIFrdyWQFO6L9y8tvFclq9xSMNynfuQClrcqZY4dSRB3KtfvTuruN0re3cjL3Kv5kFrdybl3qGUJZFXyN3I1bd6u43qGRLIrjV96NWVdy71vkKWUq4yHckWO3K7zeoZSlY7lXyncjKruWM1CyRCr5QllG5Ny7lHghVcgSLAruXdClbvQqhYEsitruQQp5EspS1tCyzGBx+/WhffGX/ADjVicpWYwO0/NrQ/vjL/nGpPhYl1tQhfL6Vca0vR7gSpYqqrrwpSH9KhA2dHinYyG3vJ4C56l+eiJmah7PDyrlc6cDo2ojMPYcjwnYpqMIlr9juYwTs1pHRmO3KDuJOwWPPmbjzE3NRZqajxZiYjPdEixYry58R5Ny5xO0kk3JKyuNcSVfF+KahiSuTBmJ+fjGLFd1Dc1o6mgWAHUAFh7L7ehoxpY193lyz3SihOyLFd2SQnYpJas3gGj/NDjqg0HKXCo1KXlSBuiRGtPqK3Z9kOY1mhGjMhsDWMxFAADRYNHNpkLVDkzwtdp9wWw9VVhO9G5/yW5XLwp0Se5P03MsZmEhUZaYeeyC4wr8Yg4rw6+X6+EOmP0y54IshC9zmVkWTQrZZWSUkWS1tGyE7IQJBCaFRGyFJCCKE7Isit9vY6/5k6x/aOP8Ao0stIcc/y2rv3ymPzjlu97HZ/MpWP7Rx/wBGllpDjn+W1d++Ux+ccvFofvZuk+IYZCEL2sBCEIBCEIBCEIBCEIBCEIBCEIBCEIBCEIBCEIBCEJYEIQgEIQgyCFWfLxW+NCePKFAtO5eO3itBCllSsUsskJ2RZLCTud6LIslhglFygISw7oB8qSLJaJXCLjeooQpO6L9wUEKpSZA3KJA3JIud6WoyjckWNTJKVyrEryWQb0snepXKLq3K3KBYd6RYe5TJS2K3K3KBYVl8ENPzaUP74y/5xqway+CD+/Sh/fGX/ONSZ4aiZt1lWj3L/wAeGrYykMCSMXNKUZgmJwA3DpmI3wQfuWEemVutWZ+BSqPO1SaNoEnLxJiKb9DWNLj6guUGLK5O4lxNUsQVF+ebqM1EmYpvexc4mw7hew7gvndHheW709WvnUUw9juRYqqkvp28u5St3IsU9dgSyq5KoWSNWtN3ouiSSrpKW6FSskKVmUqgaKKECRQgKKLIIBCEKgQhCWBCE0CQmmFRFCdkIEhCEFVCkhcnO0UKSELRQpJWQskJ2RZCyRZOyNqWtlZFkIViQrIsmhLLJCaEtbJCaEsskJoSyySUrJWQKyLJoVCsqsrLxpuahSstDdEjRnthw2N6XOJsAPOqazGBv5bUL75S/5xqkzUK+k+cvpZ+x3iX8Af8AIj5y+ln7HeJfwB/yLqahfL/1DP1Dr24csvnL6Wfsd4l/AH/Ij5y+ln7HeJfwB/yLqahP9Qz9Hbhyy+cvpZ+x3iX8AifIj5y+ln7HeJfwCJ8i6moT/UM/R24csvnL6Wfsd4l/AInyI+cvpZ+x3iX8AifIunGJMSYew1Kc7xDXKbSYFiQ+cmWQgbbsxFz3BeSYj5VWh2kRXwoFZnqu9nSJCSe4X3Bz8jT5QbLePWauf042k4RH3aRfOX0s/Y7xL+ARPkXzeLMKYkwlNwZPE1EnaRMxoeshwZuEYb3MvbMGnba4Iv3HctyxBlqYMY53MMH1+OPcmPEgwr8HOstd6rUKryheUPBivhPk4VUmGQmw8+YSUlDF3HNbqYHOJ2AuJ3r0aerqzznjUMzEfZ8hWIHzOYGkKfctqNfY2fnLEhzJQOIgQj3PcDGINwQIB2FqvJfQ7pUmZeHMQNH2I4kKKwPY9sg8hzSLgjZuVvX8TUqr6WImI6nT3TVEZPsLJCE/Lmk4VmwoAJvYatjGXt0dS2h+japf2PZz+82/7aueWrjEbMbIqfLWr5y+ln7HeJfwCJ8iPnL6Wfsd4l/AInyLZX6Nul/Y9nP7zb/to+jbpf2PZz+9G/7a593qP4LWPtrV85fSz9jvEv4BE+RHzl9LP2O8S/gET5Fsp9G5S/sezn96N/20fRuUv7Hs5/ejf9tO71H8CsfbWv5y+ln7HeJfwCJ8iPnL6Wfsd4l/AInyLZT6Nyl/Y9nP70b/ALaPo3KX9j2c/vRv+2nd6n+C1j7a1/OX0s/Y7xL+ARPkR85fSz9jvEv4BE+RbKfRuUv7Hs5/ejf9tH0blL+x7Of3o3/bTu9T/BKx9tavnLaWfsdYl/AInyI+ctpZ+x1iX8AifItlfo3KX9j2c/vRv+2j6Nyl/Y9nP70b/tq93qf4LWPtrUdC+ln7HWJfwCJ8iXzl9LP2OsS/3fE+RbLfRuUv7Hs5/ejf9tH0blL+x7Of3o3/AG07vU/wKx9tavnLaWfsdYl/u+J8i+Gm5eNKTUWVmIbocaC90OIx3S1wNiD51" alt="Al-ahly" onerror="this.style.background='linear-gradient(135deg,#0E7B6E,#0A0E1A)'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center'; this.alt='A'; this.style.fontSize='48px'; this.style.color='#C9A84C';">
     <h1 class="cover-title">باقات التسويق الرقمي</h1>
     <p class="cover-sub">اختر الباقة المناسبة لأهداف عملك</p>
     <div class="packages-overview">
-      <div class="overview-card" onclick="showPageById('p1')">
-        <span class="ov-icon">🚀</span>
-        <div class="ov-name">باقة الانطلاقة</div>
-        <div class="ov-price">2,850 ريال · 30 يوم</div>
-      </div>
-      <div class="overview-card" onclick="showPageById('p2')">
-        <span class="ov-icon">💰</span>
-        <div class="ov-name">باقة الربح</div>
-        <div class="ov-price">5,300 ريال · شهرين</div>
-      </div>
-      <div class="overview-card" onclick="showPageById('p3')">
-        <span class="ov-icon">🏔️</span>
-        <div class="ov-name">باقة القمة</div>
-        <div class="ov-price">6,900 ريال · 90 يوم</div>
-      </div>
-      <div class="overview-card" onclick="showPageById('p4')">
-        <span class="ov-icon">⭐</span>
-        <div class="ov-name">باقة التميز</div>
-        <div class="ov-price">12,800 ريال · 180 يوم</div>
-      </div>
-      <div class="overview-card" onclick="showPageById('p5')">
-        <span class="ov-icon">👑</span>
-        <div class="ov-name">باقة النخبة</div>
-        <div class="ov-price">22,000 ريال · 360 يوم</div>
-      </div>
-      <div class="overview-card" onclick="showPageById('p6')">
-        <span class="ov-icon">🎨</span>
-        <div class="ov-name">الهوية البصرية</div>
-        <div class="ov-price">2,000 ريال</div>
-      </div>
-      <div class="overview-card" onclick="showPageById('p7')">
-        <span class="ov-icon">🌐</span>
-        <div class="ov-name">تحسين الموقع</div>
-        <div class="ov-price">1,800 ريال</div>
-      </div>
+      <div class="overview-card" onclick="showPageById('p1')"><span class="ov-icon">🚀</span><div class="ov-name">باقة الانطلاقة</div><div class="ov-price">2,850 ريال · 30 يوم</div></div>
+      <div class="overview-card" onclick="showPageById('p2')"><span class="ov-icon">💰</span><div class="ov-name">باقة الربح</div><div class="ov-price">5,300 ريال · شهرين</div></div>
+      <div class="overview-card" onclick="showPageById('p3')"><span class="ov-icon">🏔️</span><div class="ov-name">باقة القمة</div><div class="ov-price">6,900 ريال · 90 يوم</div></div>
+      <div class="overview-card" onclick="showPageById('p4')"><span class="ov-icon">⭐</span><div class="ov-name">باقة التميز</div><div class="ov-price">12,800 ريال · 180 يوم</div></div>
+      <div class="overview-card" onclick="showPageById('p5')"><span class="ov-icon">👑</span><div class="ov-name">باقة النخبة</div><div class="ov-price">22,000 ريال · 360 يوم</div></div>
+      <div class="overview-card" onclick="showPageById('p6')"><span class="ov-icon">🎨</span><div class="ov-name">الهوية البصرية</div><div class="ov-price">2,000 ريال</div></div>
+      <div class="overview-card" onclick="showPageById('p7')"><span class="ov-icon">🌐</span><div class="ov-name">تحسين الموقع</div><div class="ov-price">1,800 ريال</div></div>
     </div>
   </div>
 </div>
 
-<!-- ══════ PACKAGE 1 ══════ -->
+<!-- PACKAGE 1 -->
 <div class="page" id="p1">
   <div class="hero">
     <div class="hero-badge">🚀 الأكثر طلبًا للمشاريع الناشئة</div>
     <h1 class="package-title">باقة الانطلاقة</h1>
-    <div class="price-row">
-      <span class="price-current">2,850 ريال</span>
-      <span class="price-original">3,400 ريال</span>
-      <span class="discount-badge">وفّر 550 ريال</span>
-    </div>
+    <div class="price-row"><span class="price-current">2,850 ريال</span><span class="price-original">3,400 ريال</span><span class="discount-badge">وفّر 550 ريال</span></div>
     <div class="duration-tag">📅 المدة: <span>30 يوم</span></div>
   </div>
   <div class="services-grid">
-    <div class="service-card">
-      <span class="service-icon">📱</span>
-      <div class="service-name">Social Media Management</div>
-      <ul class="service-items">
-        <li>تصميم ونشر محتوى بصري ونصي جذاب</li>
-        <li>التخطيط وجدولة المنشورات</li>
-        <li>إدارة الرسائل والتعليقات</li>
-        <li>تحليل الأداء وتقديم تقارير شهرية</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">📢</span>
-      <div class="service-name">Media Buying</div>
-      <ul class="service-items">
-        <li>تخطيط الحملات الإعلانية</li>
-        <li>تحديد الجمهور المستهدف بدقة</li>
-        <li>تصميم الإعلانات</li>
-        <li>متابعة الأداء والتحسين المستمر</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">🔍</span>
-      <div class="service-name">SEO</div>
-      <ul class="service-items">
-        <li>تحليل الكلمات المفتاحية</li>
-        <li>تحسين المحتوى والبنية التقنية</li>
-        <li>بناء روابط خارجية آمنة</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">💻</span>
-      <div class="service-name">Website Management</div>
-      <ul class="service-items">
-        <li>تحسين تجربة المستخدم</li>
-        <li>تطوير الواجهة البصرية</li>
-        <li>توافق الموقع مع جميع الأجهزة</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">📊</span>
-      <div class="service-name">CRO - تحسين التحويل</div>
-      <ul class="service-items">
-        <li>تحليل سلوك الزوار</li>
-        <li>اختبار وتحسين الصفحات</li>
-        <li>رفع نسبة التحويل</li>
-      </ul>
-    </div>
+    <div class="service-card" onclick="openModal('social')"><span class="service-icon">📱</span><div class="service-name">Social Media Management</div><p class="service-preview">تصميم ونشر محتوى · جدولة المنشورات · إدارة الرسائل والتعليقات · تقارير شهرية</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('media')"><span class="service-icon">📢</span><div class="service-name">Media Buying</div><p class="service-preview">تخطيط الحملات · تحديد الجمهور المستهدف · تصميم الإعلانات · متابعة وتحسين</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('seo')"><span class="service-icon">🔍</span><div class="service-name">SEO</div><p class="service-preview">تحليل الكلمات المفتاحية · تحسين المحتوى والبنية التقنية · بناء روابط</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('website')"><span class="service-icon">💻</span><div class="service-name">Website Management</div><p class="service-preview">تحسين تجربة المستخدم · تطوير الواجهة · توافق مع الأجهزة</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('cro')"><span class="service-icon">📊</span><div class="service-name">CRO – تحسين التحويل</div><p class="service-preview">تحليل سلوك الزوار · اختبار وتحسين الصفحات · رفع نسبة التحويل</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
   </div>
-  <div class="result-banner">
-    <span class="result-icon">🎯</span>
-    <div class="result-text">النتيجة: زيادة المبيعات – رفع الوعي – نتائج قابلة للقياس بأقل تكلفة</div>
-  </div>
+  <div class="result-banner"><span class="result-icon">🎯</span><div class="result-text">النتيجة: زيادة المبيعات – رفع الوعي – نتائج قابلة للقياس بأقل تكلفة</div></div>
 </div>
 
-<!-- ══════ PACKAGE 2 ══════ -->
+<!-- PACKAGE 2 -->
 <div class="page" id="p2">
   <div class="hero">
     <div class="hero-badge">💰 مثالية للنتائج المتسارعة</div>
     <h1 class="package-title">باقة الربح</h1>
-    <div class="price-row">
-      <span class="price-current">5,300 ريال</span>
-      <span class="price-original">6,800 ريال</span>
-      <span class="discount-badge">وفّر 1,500 ريال</span>
-    </div>
+    <div class="price-row"><span class="price-current">5,300 ريال</span><span class="price-original">6,800 ريال</span><span class="discount-badge">وفّر 1,500 ريال</span></div>
     <div class="duration-tag">📅 <span>شهر كامل + شهرين ميديا</span></div>
   </div>
-  <div class="compact-services">
-    <div class="compact-chip">📱 Social Media Management</div>
-    <div class="compact-chip">📢 Media Buying</div>
-    <div class="compact-chip">🔍 SEO</div>
-    <div class="compact-chip">💻 Website Management</div>
-    <div class="compact-chip">📊 CRO</div>
-  </div>
-  <div class="section-divider"></div>
   <div class="services-grid">
-    <div class="service-card">
-      <span class="service-icon">📱</span>
-      <div class="service-name">Social Media Management</div>
-      <ul class="service-items">
-        <li>تصميم ونشر محتوى بصري ونصي جذاب</li>
-        <li>التخطيط وجدولة المنشورات</li>
-        <li>إدارة الرسائل والتعليقات</li>
-        <li>تحليل الأداء وتقديم تقارير شهرية</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">📢</span>
-      <div class="service-name">Media Buying</div>
-      <ul class="service-items">
-        <li>تخطيط الحملات الإعلانية</li>
-        <li>تحديد الجمهور المستهدف بدقة</li>
-        <li>تصميم الإعلانات</li>
-        <li>متابعة الأداء والتحسين المستمر</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">🔍</span>
-      <div class="service-name">SEO</div>
-      <ul class="service-items">
-        <li>تحليل الكلمات المفتاحية</li>
-        <li>تحسين المحتوى والبنية التقنية</li>
-        <li>بناء روابط خارجية آمنة</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">💻</span>
-      <div class="service-name">Website Management</div>
-      <ul class="service-items">
-        <li>تحسين تجربة المستخدم</li>
-        <li>تطوير الواجهة البصرية</li>
-        <li>توافق الموقع مع جميع الأجهزة</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">📊</span>
-      <div class="service-name">CRO</div>
-      <ul class="service-items">
-        <li>تحليل سلوك الزوار</li>
-        <li>اختبار وتحسين الصفحات</li>
-        <li>رفع نسبة التحويل</li>
-      </ul>
-    </div>
+    <div class="service-card" onclick="openModal('social')"><span class="service-icon">📱</span><div class="service-name">Social Media Management</div><p class="service-preview">تصميم ونشر محتوى · جدولة المنشورات · إدارة الرسائل والتعليقات · تقارير شهرية</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('media')"><span class="service-icon">📢</span><div class="service-name">Media Buying</div><p class="service-preview">تخطيط الحملات · تحديد الجمهور المستهدف · تصميم الإعلانات · متابعة وتحسين</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('seo')"><span class="service-icon">🔍</span><div class="service-name">SEO</div><p class="service-preview">تحليل الكلمات المفتاحية · تحسين المحتوى والبنية التقنية · بناء روابط</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('website')"><span class="service-icon">💻</span><div class="service-name">Website Management</div><p class="service-preview">تحسين تجربة المستخدم · تطوير الواجهة · توافق مع الأجهزة</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('cro')"><span class="service-icon">📊</span><div class="service-name">CRO – تحسين التحويل</div><p class="service-preview">تحليل سلوك الزوار · اختبار وتحسين الصفحات · رفع نسبة التحويل</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
   </div>
-  <div class="result-banner">
-    <span class="result-icon">🎯</span>
-    <div class="result-text">تركيز أكبر على بناء حضور قوي وتحقيق مبيعات مستقرة</div>
-  </div>
+  <div class="result-banner"><span class="result-icon">🎯</span><div class="result-text">تركيز أكبر على بناء حضور قوي وتحقيق مبيعات مستقرة</div></div>
 </div>
 
-<!-- ══════ PACKAGE 3 ══════ -->
+<!-- PACKAGE 3 -->
 <div class="page" id="p3">
   <div class="hero">
     <div class="hero-badge">🏔️ للشركات ذات الطموح العالي</div>
     <h1 class="package-title">باقة القمة</h1>
-    <div class="price-row">
-      <span class="price-current">6,900 ريال</span>
-      <span class="price-original">10,100 ريال</span>
-      <span class="discount-badge">وفّر 3,200 ريال</span>
-    </div>
-    <div class="duration-tag">📅 المدة: <span>90 يوم – جميع الخدمات</span></div>
+    <div class="price-row"><span class="price-current">6,900 ريال</span><span class="price-original">10,100 ريال</span><span class="discount-badge">وفّر 3,200 ريال</span></div>
+    <div class="duration-tag">📅 <span>90 يوم – جميع الخدمات</span></div>
   </div>
   <div class="services-grid">
-    <div class="service-card">
-      <span class="service-icon">📱</span>
-      <div class="service-name">إدارة كاملة للسوشيال ميديا</div>
-      <ul class="service-items">
-        <li>تصميم ونشر محتوى بصري ونصي جذاب</li>
-        <li>التخطيط وجدولة المنشورات</li>
-        <li>إدارة الرسائل والتعليقات</li>
-        <li>تحليل الأداء وتقديم تقارير شهرية</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">📢</span>
-      <div class="service-name">إدارة الحملات الإعلانية باحتراف</div>
-      <ul class="service-items">
-        <li>تخطيط الحملات الإعلانية</li>
-        <li>تحديد الجمهور المستهدف بدقة</li>
-        <li>تصميم الإعلانات بجودة عالية</li>
-        <li>متابعة الأداء والتحسين المستمر</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">🔍</span>
-      <div class="service-name">تحسين SEO شامل</div>
-      <ul class="service-items">
-        <li>تحليل الكلمات المفتاحية</li>
-        <li>تحسين المحتوى والبنية التقنية</li>
-        <li>بناء روابط خارجية آمنة</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">💻</span>
-      <div class="service-name">إدارة وتطوير الموقع</div>
-      <ul class="service-items">
-        <li>تحسين تجربة المستخدم</li>
-        <li>تطوير الواجهة البصرية</li>
-        <li>توافق مع جميع الأجهزة</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">📊</span>
-      <div class="service-name">تحسين معدل التحويل CRO</div>
-      <ul class="service-items">
-        <li>تحليل سلوك الزوار</li>
-        <li>اختبار وتحسين الصفحات</li>
-        <li>رفع نسبة التحويل بشكل ملحوظ</li>
-      </ul>
-    </div>
+    <div class="service-card" onclick="openModal('social')"><span class="service-icon">📱</span><div class="service-name">إدارة كاملة للسوشيال ميديا</div><p class="service-preview">تصميم ونشر محتوى · جدولة المنشورات · إدارة الرسائل والتعليقات · تقارير شهرية</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('media')"><span class="service-icon">📢</span><div class="service-name">إدارة الحملات الإعلانية باحتراف</div><p class="service-preview">تخطيط الحملات · تحديد الجمهور · تصميم الإعلانات · متابعة وتحسين</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('seo')"><span class="service-icon">🔍</span><div class="service-name">تحسين SEO شامل</div><p class="service-preview">تحليل الكلمات المفتاحية · تحسين المحتوى والبنية · بناء روابط</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('website')"><span class="service-icon">💻</span><div class="service-name">إدارة وتطوير الموقع</div><p class="service-preview">تحسين تجربة المستخدم · تطوير الواجهة · توافق مع الأجهزة</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('cro')"><span class="service-icon">📊</span><div class="service-name">تحسين معدل التحويل CRO</div><p class="service-preview">تحليل سلوك الزوار · اختبار وتحسين الصفحات · رفع نسبة التحويل</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
   </div>
-  <div class="result-banner">
-    <span class="result-icon">🎯</span>
-    <div class="result-text">مثالية للشركات اللي تبغى نتائج واضحة خلال ربع سنة</div>
-  </div>
+  <div class="result-banner"><span class="result-icon">🎯</span><div class="result-text">مثالية للشركات اللي تبغى نتائج واضحة خلال ربع سنة</div></div>
 </div>
 
-<!-- ══════ PACKAGE 4 ══════ -->
+<!-- PACKAGE 4 -->
 <div class="page" id="p4">
   <div class="hero">
     <div class="hero-badge">⭐ للعلامات التجارية الطامحة للتوسع</div>
     <h1 class="package-title">باقة التميز</h1>
-    <div class="price-row">
-      <span class="price-current">12,800 ريال</span>
-      <span class="price-original">19,400 ريال</span>
-      <span class="discount-badge">وفّر 6,600 ريال</span>
-    </div>
-    <div class="duration-tag">📅 المدة: <span>180 يوم</span></div>
+    <div class="price-row"><span class="price-current">12,800 ريال</span><span class="price-original">19,400 ريال</span><span class="discount-badge">وفّر 6,600 ريال</span></div>
+    <div class="duration-tag">📅 <span>180 يوم</span></div>
   </div>
   <div class="services-grid">
-    <div class="service-card">
-      <span class="service-icon">📱</span>
-      <div class="service-name">جميع خدمات التسويق الرقمي</div>
-      <ul class="service-items">
-        <li>Social Media Management الكاملة</li>
-        <li>Media Buying محترف</li>
-        <li>SEO شامل ومتقدم</li>
-        <li>إدارة وتطوير الموقع</li>
-        <li>تحسين معدل التحويل CRO</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">🌐</span>
-      <div class="service-name">تطوير مستمر للموقع</div>
-      <ul class="service-items">
-        <li>تطوير الواجهة البصرية باستمرار</li>
-        <li>تحسين تجربة المستخدم دوريًا</li>
-        <li>توافق الموقع مع جميع الأجهزة</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">📊</span>
-      <div class="service-name">تحسين متقدم للتحويل</div>
-      <ul class="service-items">
-        <li>تحليل سلوك الزوار بعمق</li>
-        <li>اختبار A/B متقدم للصفحات</li>
-        <li>رفع نسبة التحويل بشكل مستمر</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">📈</span>
-      <div class="service-name">تقارير أداء استراتيجية</div>
-      <ul class="service-items">
-        <li>تقارير شهرية تفصيلية</li>
-        <li>تحليل المنافسين</li>
-        <li>توصيات استراتيجية دورية</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">🗺️</span>
-      <div class="service-name">خطة نمو نصف سنوية</div>
-      <ul class="service-items">
-        <li>وضع خطة نمو متكاملة</li>
-        <li>تحديد أهداف قابلة للقياس</li>
-        <li>مراجعات استراتيجية دورية</li>
-      </ul>
-    </div>
+    <div class="service-card" onclick="openModal('social')"><span class="service-icon">📱</span><div class="service-name">Social Media Management</div><p class="service-preview">إدارة كاملة لجميع المنصات · محتوى احترافي · تقارير أداء</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('media')"><span class="service-icon">📢</span><div class="service-name">Media Buying</div><p class="service-preview">حملات إعلانية محترفة · متابعة وتحسين مستمر</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('seo')"><span class="service-icon">🔍</span><div class="service-name">SEO</div><p class="service-preview">تحسين شامل ومتقدم لمحركات البحث</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('website')"><span class="service-icon">💻</span><div class="service-name">Website Management</div><p class="service-preview">تطوير مستمر للموقع وتحسين تجربة المستخدم</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('cro')"><span class="service-icon">📊</span><div class="service-name">CRO متقدم</div><p class="service-preview">تحليل عميق وتحسين مستمر لنسبة التحويل</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('reports')"><span class="service-icon">📈</span><div class="service-name">تقارير أداء استراتيجية</div><p class="service-preview">تقارير تفصيلية · تحليل المنافسين · توصيات استراتيجية دورية</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('growthplan')"><span class="service-icon">🗺️</span><div class="service-name">خطة نمو نصف سنوية</div><p class="service-preview">خارطة طريق · أهداف قابلة للقياس · مراجعات دورية</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
   </div>
-  <div class="result-banner">
-    <span class="result-icon">🎯</span>
-    <div class="result-text">مناسبة للعلامات التجارية اللي تبغى توسع حصتها السوقية</div>
-  </div>
+  <div class="result-banner"><span class="result-icon">🎯</span><div class="result-text">مناسبة للعلامات التجارية اللي تبغى توسع حصتها السوقية</div></div>
 </div>
 
-<!-- ══════ PACKAGE 5 ══════ -->
+<!-- PACKAGE 5 -->
 <div class="page" id="p5">
   <div class="hero">
     <div class="hero-badge">👑 الباقة السنوية الأشمل</div>
     <h1 class="package-title">باقة النخبة</h1>
-    <div class="price-row">
-      <span class="price-current">22,000 ريال</span>
-      <span class="price-original">25,200 ريال</span>
-      <span class="discount-badge">وفّر 3,200 ريال</span>
-    </div>
-    <div class="duration-tag">📅 المدة: <span>360 يوم كاملة</span></div>
+    <div class="price-row"><span class="price-current">22,000 ريال</span><span class="price-original">25,200 ريال</span><span class="discount-badge">وفّر 3,200 ريال</span></div>
+    <div class="duration-tag">📅 <span>360 يوم كاملة</span></div>
   </div>
   <div class="services-grid">
-    <div class="service-card">
-      <span class="service-icon">📱</span>
-      <div class="service-name">إدارة وتسويق رقمي سنوي كامل</div>
-      <ul class="service-items">
-        <li>Social Media Management السنوي</li>
-        <li>تصميم ونشر محتوى على مدار السنة</li>
-        <li>إدارة الرسائل والتعليقات اليومية</li>
-        <li>تقارير أداء شهرية وربعية</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">📢</span>
-      <div class="service-name">تحسين مستمر للحملات والإعلانات</div>
-      <ul class="service-items">
-        <li>إدارة احترافية للحملات الإعلانية</li>
-        <li>تحسين مستمر لأداء الإعلانات</li>
-        <li>تحديد الجمهور المستهدف بدقة</li>
-        <li>متابعة يومية للميزانية والنتائج</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">🔍</span>
-      <div class="service-name">SEO استراتيجي طويل المدى</div>
-      <ul class="service-items">
-        <li>تحليل وتحسين الكلمات المفتاحية</li>
-        <li>بناء روابط خارجية آمنة ومستمرة</li>
-        <li>تحسين تقني شامل للموقع</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">💻</span>
-      <div class="service-name">إدارة وتطوير الموقع</div>
-      <ul class="service-items">
-        <li>تطوير مستمر للموقع طوال السنة</li>
-        <li>تحسين تجربة المستخدم دوريًا</li>
-        <li>صيانة وأمان الموقع</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">📊</span>
-      <div class="service-name">CRO متقدم</div>
-      <ul class="service-items">
-        <li>تحليل سلوك الزوار بعمق</li>
-        <li>اختبارات مستمرة لتحسين الصفحات</li>
-        <li>رفع نسبة التحويل بشكل ملحوظ</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">🗺️</span>
-      <div class="service-name">خطة توسع سنوية</div>
-      <ul class="service-items">
-        <li>وضع خطة توسع شاملة للسنة</li>
-        <li>مراجعات استراتيجية ربع سنوية</li>
-        <li>تقارير أداء استراتيجية دورية</li>
-      </ul>
-    </div>
+    <div class="service-card" onclick="openModal('social')"><span class="service-icon">📱</span><div class="service-name">Social Media Management</div><p class="service-preview">إدارة سنوية كاملة · محتوى يومي متواصل · تقارير شهرية وربعية</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('media')"><span class="service-icon">📢</span><div class="service-name">Media Buying</div><p class="service-preview">حملات احترافية · متابعة يومية · تحسين مستمر طوال السنة</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('seo')"><span class="service-icon">🔍</span><div class="service-name">SEO استراتيجي طويل المدى</div><p class="service-preview">تحسين مستمر · بناء روابط · تقنية متقدمة طوال السنة</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('website')"><span class="service-icon">💻</span><div class="service-name">إدارة وتطوير الموقع</div><p class="service-preview">تطوير مستمر · صيانة وأمان · تحسين UX دوري</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('cro')"><span class="service-icon">📊</span><div class="service-name">CRO متقدم</div><p class="service-preview">اختبارات مستمرة · تحليل عميق · رفع مستمر للتحويل</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('yearplan')"><span class="service-icon">🗺️</span><div class="service-name">خطة توسع سنوية</div><p class="service-preview">استراتيجية سنوية شاملة · مراجعات ربعية · تقارير استراتيجية</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
   </div>
-  <div class="result-banner">
-    <span class="result-icon">🎯</span>
-    <div class="result-text">بناء علامة تجارية قوية ومستقرة على مدار العام – الخيار الأذكى للمدى البعيد</div>
-  </div>
+  <div class="result-banner"><span class="result-icon">🎯</span><div class="result-text">بناء علامة تجارية قوية ومستقرة على مدار العام – الخيار الأذكى للمدى البعيد</div></div>
 </div>
 
-<!-- ══════ PACKAGE 6 ══════ -->
+<!-- PACKAGE 6 -->
 <div class="page" id="p6">
   <div class="hero">
     <div class="hero-badge">🎨 ابنِ هويتك من الصفر</div>
     <h1 class="package-title">باقة الهوية البصرية</h1>
-    <div class="price-row">
-      <span class="price-current">2,000 ريال</span>
-      <span class="price-original">3,500 ريال</span>
-      <span class="discount-badge">وفّر 1,500 ريال</span>
-    </div>
+    <div class="price-row"><span class="price-current">2,000 ريال</span><span class="price-original">3,500 ريال</span><span class="discount-badge">وفّر 1,500 ريال</span></div>
     <div class="duration-tag">🎨 <span>هوية متكاملة من الألف للياء</span></div>
   </div>
   <div class="services-grid">
-    <div class="service-card">
-      <span class="service-icon">🖊️</span>
-      <div class="service-name">تصميم الشعار</div>
-      <ul class="service-items">
-        <li>شعار رمزي</li>
-        <li>شعار نصي</li>
-        <li>شعار مختصر</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">🎨</span>
-      <div class="service-name">نظام الألوان والخطوط</div>
-      <ul class="service-items">
-        <li>اختيار نظام الألوان</li>
-        <li>تحديد الخطوط (Typography)</li>
-        <li>تصميم Moodboard</li>
-        <li>إعداد Brand Guidelines</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">🔬</span>
-      <div class="service-name">الدراسة والاستراتيجية</div>
-      <ul class="service-items">
-        <li>تحليل السوق والمنافسين</li>
-        <li>صياغة الرؤية والرسالة</li>
-        <li>تحديد القيم الجوهرية</li>
-        <li>تحديد Voice & Tone</li>
-        <li>استراتيجية التمركز (Positioning)</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">🖨️</span>
-      <div class="service-name">المطبوعات والتغليف</div>
-      <ul class="service-items">
-        <li>تصميم بطاقات العمل</li>
-        <li>أوراق رسمية وأظرف</li>
-        <li>تصميم التغليف (Packaging)</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">📖</span>
-      <div class="service-name">تجربة العلامة التجارية</div>
-      <ul class="service-items">
-        <li>Brand Storytelling</li>
-        <li>تصميم تجربة العميل</li>
-      </ul>
-    </div>
+    <div class="service-card" onclick="openModal('logo')"><span class="service-icon">🖊️</span><div class="service-name">تصميم الشعار</div><p class="service-preview">رمزي · نصي · مختصر · مدمج</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('brandcolors')"><span class="service-icon">🎨</span><div class="service-name">نظام الألوان والخطوط</div><p class="service-preview">نظام الألوان · Typography · Moodboard · Brand Guidelines</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('brandstrategy')"><span class="service-icon">🔬</span><div class="service-name">الدراسة والاستراتيجية</div><p class="service-preview">تحليل السوق · الرؤية والرسالة · Voice & Tone · Positioning</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('print')"><span class="service-icon">🖨️</span><div class="service-name">المطبوعات والتغليف</div><p class="service-preview">بطاقات العمل · أوراق رسمية · أظرف · Packaging</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('brandexp')"><span class="service-icon">📖</span><div class="service-name">تجربة العلامة التجارية</div><p class="service-preview">Brand Storytelling · تصميم تجربة العميل</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
   </div>
-  <div class="result-banner">
-    <span class="result-icon">🎯</span>
-    <div class="result-text">هوية بصرية متكاملة تعكس قيم علامتك التجارية وتميزها في السوق</div>
-  </div>
+  <div class="result-banner"><span class="result-icon">🎯</span><div class="result-text">هوية بصرية متكاملة تعكس قيم علامتك التجارية وتميزها في السوق</div></div>
 </div>
 
-<!-- ══════ PACKAGE 7 ══════ -->
+<!-- PACKAGE 7 -->
 <div class="page" id="p7">
   <div class="hero">
     <div class="hero-badge">🌐 موقعك قوتك الرقمية</div>
     <h1 class="package-title">باقة تحسين الموقع</h1>
-    <div class="price-row">
-      <span class="price-current">1,800 ريال</span>
-      <span class="price-original">2,200 ريال</span>
-      <span class="discount-badge">وفّر 400 ريال</span>
-    </div>
+    <div class="price-row"><span class="price-current">1,800 ريال</span><span class="price-original">2,200 ريال</span><span class="discount-badge">وفّر 400 ريال</span></div>
     <div class="duration-tag">🌐 <span>موقع أسرع – أكثر أمانًا – أعلى تحويلًا</span></div>
   </div>
   <div class="services-grid">
-    <div class="service-card">
-      <span class="service-icon">💻</span>
-      <div class="service-name">إدارة الموقع وتجربة المستخدم</div>
-      <ul class="service-items">
-        <li>Website Management الاحترافي</li>
-        <li>تحسين تجربة المستخدم UX/UI</li>
-        <li>توافق الموقع مع جميع الأجهزة</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">📊</span>
-      <div class="service-name">تحسين معدل التحويل CRO</div>
-      <ul class="service-items">
-        <li>تحليل سلوك الزوار</li>
-        <li>اختبار وتحسين الصفحات</li>
-        <li>رفع نسبة التحويل</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">💳</span>
-      <div class="service-name">بوابات الدفع الإلكتروني</div>
-      <ul class="service-items">
-        <li>تفعيل مدى</li>
-        <li>تفعيل STC Pay</li>
-        <li>تفعيل Apple Pay</li>
-        <li>تفعيل PayPal</li>
-        <li>تفعيل Visa & MasterCard</li>
-        <li>ضبط إعدادات الدفع</li>
-      </ul>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">🔒</span>
-      <div class="service-name">أمان الموقع</div>
-      <ul class="service-items">
-        <li>تأمين الموقع بشهادة SSL</li>
-        <li>PCI Compliance</li>
-        <li>حماية بيانات العملاء</li>
-      </ul>
-    </div>
+    <div class="service-card" onclick="openModal('webmgmt')"><span class="service-icon">💻</span><div class="service-name">إدارة الموقع وتجربة المستخدم</div><p class="service-preview">Website Management · UX/UI · توافق مع الأجهزة</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('cro')"><span class="service-icon">📊</span><div class="service-name">CRO – تحسين التحويل</div><p class="service-preview">تحليل سلوك الزوار · اختبار الصفحات · رفع التحويل</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('payment')"><span class="service-icon">💳</span><div class="service-name">بوابات الدفع الإلكتروني</div><p class="service-preview">مدى · STC Pay · Apple Pay · PayPal · Visa · MasterCard</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
+    <div class="service-card" onclick="openModal('security')"><span class="service-icon">🔒</span><div class="service-name">أمان الموقع</div><p class="service-preview">SSL · PCI Compliance · حماية بيانات العملاء</p><div class="service-tap-hint">← اضغط لعرض التفاصيل الكاملة</div></div>
   </div>
-  <div class="result-banner">
-    <span class="result-icon">🎯</span>
-    <div class="result-text">موقع أسرع وأكثر أمانًا وأعلى معدل تحويل – استثمر في تجربة عملائك</div>
+  <div class="result-banner"><span class="result-icon">🎯</span><div class="result-text">موقع أسرع وأكثر أمانًا وأعلى معدل تحويل – استثمر في تجربة عملائك</div></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeBg(event)">
+  <div class="modal" id="modalBox">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalContent"></div>
   </div>
 </div>
 
 <script>
-  function showPage(id, btn) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    if(btn) btn.classList.add('active');
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
+function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');if(btn)btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function showPageById(id){const m={p1:1,p2:2,p3:3,p4:4,p5:5,p6:6,p7:7};showPage(id,document.querySelectorAll('.tab-btn')[m[id]]);}
 
-  function showPageById(id) {
-    const tabIndex = {'p1':1,'p2':2,'p3':3,'p4':4,'p5':5,'p6':6,'p7':7};
-    const tabs = document.querySelectorAll('.tab-btn');
-    showPage(id, tabs[tabIndex[id]]);
-  }
+const SVC={
+  social:{icon:'📱',title:'Social Media Management',sub:'إدارة احترافية شاملة لحضورك على منصات التواصل',sections:[
+    {t:'المحتوى والإنتاج',items:[
+      {t:'تصميم محتوى بصري احترافي',d:'تصاميم جرافيك وموشن جرافيك تعكس هوية علامتك التجارية بالكامل'},
+      {t:'كتابة محتوى نصي جذاب',d:'كابشن وعناوين مكتوبة باحترافية تجذب الجمهور وتحفز التفاعل والمشاركة'},
+      {t:'إنتاج ريلز وفيديوهات قصيرة',d:'محتوى فيديو متوافق مع خوارزميات كل منصة لأعلى انتشار'},
+      {t:'تصميم ستوري يومي',d:'ستوريز تفاعلية تبقي جمهورك على تواصل مستمر وترفع نسبة المشاهدة'},
+    ]},
+    {t:'التخطيط والجدولة',items:[
+      {t:'تقويم محتوى شهري كامل',d:'خطة نشر متكاملة بمحتوى موزع ومدروس يغطي كل أيام الشهر'},
+      {t:'جدولة المنشورات في الأوقات المثلى',d:'نشر في أوقات الذروة بناءً على بيانات جمهورك لتحقيق أعلى وصول'},
+      {t:'نشر على جميع المنصات',d:'انستغرام، تويتر/X، فيسبوك، تيك توك، لينكد إن، يوتيوب شورتس'},
+      {t:'استراتيجية المحتوى',d:'مزيج مدروس بين محتوى التوعية والترفيه والمبيعات والتفاعل'},
+    ]},
+    {t:'إدارة المجتمع',items:[
+      {t:'الرد على التعليقات والرسائل',d:'تفاعل سريع واحترافي مع جمهورك في أقل من 24 ساعة'},
+      {t:'إدارة الكمنتس السلبية',d:'التعامل الاحترافي مع الشكاوى والتعليقات السلبية لحماية سمعة علامتك'},
+      {t:'بناء مجتمع متفاعل',d:'استراتيجيات مثبتة لزيادة التفاعل ونمو قاعدة المتابعين الحقيقيين'},
+    ]},
+    {t:'التحليل والتقارير',items:[
+      {t:'تقرير أداء شهري مفصل',d:'مؤشرات الأداء: الوصول، التفاعل، نمو المتابعين، أفضل المنشورات'},
+      {t:'تحليل المنافسين',d:'مراقبة دورية لنشاط المنافسين وتقديم توصيات للتفوق عليهم'},
+      {t:'تقرير رؤى الجمهور',d:'تحليل الديموغرافيا والاهتمامات وسلوك جمهورك المستهدف'},
+    ]},
+  ]},
+  media:{icon:'📢',title:'Media Buying',sub:'حملات إعلانية مدروسة تحقق أعلى عائد على الاستثمار',sections:[
+    {t:'التخطيط الاستراتيجي',items:[
+      {t:'دراسة الجمهور المستهدف',d:'تحديد الشرائح الديموغرافية والاهتمامات والسلوك الشرائي بدقة عالية'},
+      {t:'اختيار المنصات المناسبة',d:'Meta Ads, Google Ads, TikTok Ads, Snapchat Ads, Twitter/X Ads'},
+      {t:'تحديد الميزانية المثلى',d:'توزيع الميزانية الذكي بين الحملات لتحقيق أعلى كفاءة في الإنفاق'},
+      {t:'وضع استراتيجية الحملة',d:'تحديد الأهداف بدقة: وعي، زيارات، عملاء محتملين، مبيعات مباشرة'},
+    ]},
+    {t:'تصميم وإنتاج الإعلانات',items:[
+      {t:'تصميم إعلانات بصرية احترافية',d:'صور وفيديوهات إعلانية مخصصة لكل منصة وحجم ومتطلبات'},
+      {t:'كتابة نصوص إعلانية مقنعة',d:'Copywriting احترافي يحفز النقر والتحويل ويتحدث بلغة جمهورك'},
+      {t:'إنشاء إعلانات كاروسيل وريلز',d:'أشكال إعلانية متعددة ومبتكرة لتحقيق أعلى تفاعل وتحويل'},
+      {t:'Landing Pages محسّنة',d:'صفحات هبوط مخصصة لكل حملة مصممة لرفع نسبة التحويل'},
+    ]},
+    {t:'الإدارة والتحسين',items:[
+      {t:'إعداد وإطلاق الحملات',d:'إعداد احترافي كامل لجميع إعدادات الحملات على كل المنصات'},
+      {t:'مراقبة يومية للأداء',d:'متابعة مستمرة لجميع المؤشرات وتدخل سريع عند أي انخفاض في الأداء'},
+      {t:'A/B Testing مستمر',d:'اختبار نسخ متعددة من الإعلانات واختيار الأفضل أداءً باستمرار'},
+      {t:'تحسين مستمر للحملات',d:'تعديل الاستهداف والميزانية والمحتوى لضمان تحسين النتائج دوماً'},
+    ]},
+    {t:'القياس والتقارير',items:[
+      {t:'تقرير أداء أسبوعي',d:'نتائج الحملات: الوصول، النقرات، التكلفة لكل تحويل، العملاء'},
+      {t:'تقرير ROI شهري',d:'قياس العائد الفعلي على الاستثمار الإعلاني وتقييم كفاءة الإنفاق'},
+      {t:'تحليل البيانات وتوصيات',d:'خلاصات قابلة للتنفيذ مبنية على بيانات حقيقية لتطوير الأداء'},
+    ]},
+  ]},
+  seo:{icon:'🔍',title:'SEO – تحسين محركات البحث',sub:'ارتقِ بموقعك في نتائج جوجل وابنِ حضوراً عضوياً مستداماً',sections:[
+    {t:'تحليل الكلمات المفتاحية',items:[
+      {t:'بحث شامل عن الكلمات المفتاحية',d:'تحديد الكلمات الأعلى بحثاً والأقل منافسة في مجال عملك بدقة'},
+      {t:'تحليل نية البحث',d:'فهم ما يريده جمهورك المستهدف فعلياً عند البحث لاستهدافهم بشكل أمثل'},
+      {t:'تحليل كلمات المنافسين',d:'اكتشاف الكلمات المفتاحية التي تصنّف عليها المنافسون والاستفادة منها'},
+      {t:'خريطة كلمات للموقع',d:'تخصيص الكلمات المفتاحية المثلى لكل صفحة من صفحات موقعك'},
+    ]},
+    {t:'On-Page SEO',items:[
+      {t:'تحسين العناوين والـ Meta',d:'Title Tags وMeta Descriptions مُحسّنة ومقنعة لكل صفحة'},
+      {t:'تحسين محتوى الصفحات',d:'كتابة وتعديل المحتوى ليكون محسّناً لمحركات البحث ومفيداً للقارئ'},
+      {t:'تحسين هيكل العناوين H1-H6',d:'بنية عناوين واضحة ومنطقية تساعد جوجل على فهم الموضوع بسهولة'},
+      {t:'تحسين الصور',d:'Alt Text وضغط الصور لتحسين سرعة التحميل والترتيب في النتائج'},
+    ]},
+    {t:'Technical SEO',items:[
+      {t:'تحسين سرعة الموقع',d:'تحسين Core Web Vitals وتقليل وقت التحميل لتجربة مستخدم أفضل'},
+      {t:'إعداد Sitemap وRobots.txt',d:'مساعدة جوجل على زحف وفهرسة الموقع بكفاءة تامة'},
+      {t:'إصلاح الروابط المكسورة',d:'اكتشاف وإصلاح جميع روابط الخطأ وصفحات 404 الضارة بالترتيب'},
+      {t:'Schema Markup',d:'بيانات منظمة تساعد جوجل على فهم محتوى موقعك وعرضه بشكل مميز'},
+    ]},
+    {t:'Off-Page SEO',items:[
+      {t:'بناء روابط خلفية آمنة',d:'اكتساب Backlinks عالية الجودة من مواقع موثوقة وذات سلطة عالية'},
+      {t:'Local SEO',d:'تحسين الظهور في نتائج البحث المحلية والخريطة في منطقتك الجغرافية'},
+      {t:'Google Business Profile',d:'إعداد وتحسين ملف نشاطك التجاري على جوجل لزيادة الظهور المحلي'},
+    ]},
+  ]},
+  website:{icon:'💻',title:'Website Management',sub:'إدارة موقعك لتقديم تجربة مستخدم استثنائية وأداء تقني عالٍ',sections:[
+    {t:'تجربة المستخدم UX',items:[
+      {t:'تحليل تجربة المستخدم الحالية',d:'مراجعة شاملة لرحلة المستخدم في موقعك وتحديد نقاط الإحباط والخروج'},
+      {t:'تحسين واجهة المستخدم UI',d:'تصميم واجهة جذابة وسهلة الاستخدام تعكس الهوية البصرية للعلامة'},
+      {t:'تحسين رحلة الشراء',d:'تبسيط مسار التحويل من أول زيارة حتى إتمام عملية الشراء بنجاح'},
+      {t:'تحسين Navigation والبنية',d:'هيكل تنقل واضح يجعل المستخدم يجد ما يريده في أقل عدد من الخطوات'},
+    ]},
+    {t:'التطوير التقني',items:[
+      {t:'تطوير الواجهة البصرية',d:'تحديث وتطوير تصميم الموقع ليعكس هوية علامتك ويجذب الزوار'},
+      {t:'Responsive Design',d:'توافق تام مع جميع الأجهزة: جوال، تابلت، كمبيوتر بجميع أحجام الشاشات'},
+      {t:'تحسين سرعة الموقع',d:'تحسين وقت التحميل لتقليل معدل الارتداد وتحسين ترتيب SEO'},
+      {t:'إدارة المحتوى والتحديثات',d:'تحديث المنتجات والصفحات والمحتوى بصفة منتظمة وسريعة'},
+    ]},
+    {t:'الصيانة والمتابعة',items:[
+      {t:'مراقبة الموقع',d:'تنبيه فوري عند أي عطل أو انقطاع في الخدمة لضمان التشغيل الدائم'},
+      {t:'تحديثات الأمان',d:'تحديث النظام والإضافات دورياً لحماية الموقع من الاختراق والثغرات'},
+      {t:'نسخ احتياطي دوري',d:'حفظ نسخ احتياطية تلقائية لضمان عدم فقدان أي بيانات'},
+    ]},
+  ]},
+  cro:{icon:'📊',title:'CRO – Conversion Rate Optimization',sub:'حوّل زوار موقعك إلى عملاء حقيقيين وضاعف مبيعاتك',sections:[
+    {t:'تحليل السلوك',items:[
+      {t:'خرائط الحرارة Heatmaps',d:'معرفة أين يضغط الزوار، وأين يتوقفون، وما الذي يجذب انتباههم'},
+      {t:'تحليل تسجيلات الجلسات',d:'مشاهدة كيف يتعامل الزوار فعلياً مع موقعك لاكتشاف المشاكل'},
+      {t:'تحليل مسار التحويل Funnel',d:'تحديد بدقة أين يخرج الزوار قبل إتمام الشراء والحجز'},
+      {t:'تحديد نقاط الاحتكاك',d:'اكتشاف جميع العقبات والعوامل التي تمنع الزوار من التحويل'},
+    ]},
+    {t:'الاختبار والتحسين',items:[
+      {t:'A/B Testing للصفحات',d:'اختبار نسختين من الصفحة في نفس الوقت لمعرفة الأفضل تحويلاً'},
+      {t:'اختبار العناوين والـ CTA',d:'تجربة عناوين مختلفة ونصوص أزرار الدعوة للعمل لتحديد الأكثر إقناعاً'},
+      {t:'اختبار التصاميم والألوان',d:'تجربة تصاميم وألوان مختلفة بناءً على علم النفس البصري والتأثير'},
+      {t:'اختبار نماذج الطلبات',d:'تبسيط النماذج والخطوات لتقليل معدل التخلي عن سلة الشراء'},
+    ]},
+    {t:'تحسين صفحات التحويل',items:[
+      {t:'Landing Pages عالية التحويل',d:'صفحات هبوط مخصصة ومحسّنة لكل حملة وكل شريحة جمهور'},
+      {t:'تحسين صفحة المنتج',d:'عرض المنتج بطريقة مقنعة: صور احترافية، وصف جذاب، دليل اجتماعي'},
+      {t:'تحسين سلة الشراء والدفع',d:'تقليل الخطوات وتبسيط عملية الدفع للحد من التخلي عن الشراء'},
+    ]},
+    {t:'القياس والتقارير',items:[
+      {t:'Conversion Tracking دقيق',d:'إعداد تتبع شامل لجميع أهداف التحويل عبر Google Analytics وغيره'},
+      {t:'تقرير CRO شهري',d:'نتائج الاختبارات ومعدلات التحويل والتحسينات المحققة'},
+      {t:'قياس الأثر المالي',d:'حساب العائد الفعلي لكل تحسين على إيراداتك ومبيعاتك'},
+    ]},
+  ]},
+  reports:{icon:'📈',title:'تقارير أداء استراتيجية',sub:'بيانات حقيقية ورؤى استراتيجية تدعم قراراتك التسويقية',sections:[
+    {t:'التقارير الدورية',items:[
+      {t:'تقرير أداء شهري شامل',d:'تغطية جميع القنوات: السوشيال، الإعلانات، SEO، الموقع في تقرير موحد'},
+      {t:'Dashboard تفاعلي',d:'لوحة تحكم حية تعرض مؤشرات الأداء الرئيسية KPIs في الوقت الفعلي'},
+      {t:'تقرير العائد على الاستثمار',d:'ربط الإنفاق التسويقي بالإيرادات والعملاء الفعليين'},
+    ]},
+    {t:'تحليل المنافسين',items:[
+      {t:'مراقبة نشاط المنافسين',d:'متابعة دورية لاستراتيجيات المنافسين على جميع القنوات الرقمية'},
+      {t:'تحليل فجوة المحتوى',d:'اكتشاف الفرص التي يستغلها المنافسون وأنت لا تزال لم تستغلها'},
+      {t:'Benchmark مقارنة المؤشرات',d:'قياس أدائك مقارنةً بمعايير الصناعة والمنافسين الرئيسيين'},
+    ]},
+    {t:'التوصيات الاستراتيجية',items:[
+      {t:'توصيات مبنية على البيانات',d:'خطوات محددة وقابلة للتنفيذ مستندة إلى تحليل الأرقام والاتجاهات'},
+      {t:'اجتماع استراتيجي شهري',d:'جلسة مراجعة لمناقشة النتائج ووضع أولويات الشهر القادم'},
+    ]},
+  ]},
+  growthplan:{icon:'🗺️',title:'خطة نمو نصف سنوية',sub:'خارطة طريق واضحة لتحقيق أهدافك خلال 6 أشهر',sections:[
+    {t:'بناء الخطة',items:[
+      {t:'تحديد أهداف SMART',d:'أهداف محددة وقابلة للقياس ومرتبطة بالزمن لتتبع التقدم بدقة'},
+      {t:'خارطة طريق ربعية',d:'توزيع الأنشطة والمبادرات التسويقية على مدى الـ 6 أشهر'},
+      {t:'تخطيط الميزانية التسويقية',d:'توزيع مثالي للميزانية على القنوات المختلفة لتحقيق أعلى عائد'},
+    ]},
+    {t:'المراجعة والتتبع',items:[
+      {t:'مراجعات ربعية للخطة',d:'تقييم التقدم كل 3 أشهر وتعديل الخطة بناءً على النتائج الفعلية'},
+      {t:'تقرير مرحلي نصف سنوي',d:'تقييم شامل للإنجازات والفرص ووضع خطة النصف الثاني'},
+    ]},
+  ]},
+  yearplan:{icon:'🗺️',title:'خطة توسع سنوية',sub:'استراتيجية تسويقية سنوية شاملة لبناء علامة تجارية راسخة',sections:[
+    {t:'الاستراتيجية السنوية',items:[
+      {t:'تحليل الوضع الحالي',d:'تقييم شامل للوضع التسويقي ونقاط القوة والضعف والفرص والتهديدات'},
+      {t:'وضع أهداف سنوية',d:'أهداف نمو واضحة وطموحة في المبيعات والوعي والحصة السوقية'},
+      {t:'خارطة طريق ربعية مفصلة',d:'خطة تنفيذية تفصيلية توزع الأنشطة على 4 أرباع السنة'},
+      {t:'تخطيط الميزانية السنوية',d:'توزيع استراتيجي للميزانية على القنوات لتحقيق أعلى عائد سنوي'},
+    ]},
+    {t:'المتابعة والمراجعة',items:[
+      {t:'مراجعات استراتيجية ربعية',d:'جلسات تقييم كل 3 أشهر لمراجعة النتائج وتعديل الخطة وفق المستجدات'},
+      {t:'تقرير سنوي شامل',d:'تقييم نهاية السنة مع توصيات وخطة استراتيجية للسنة القادمة'},
+      {t:'اجتماعات قيادية منتظمة',d:'لقاءات دورية مع صناع القرار لمناقشة التوجهات الاستراتيجية'},
+    ]},
+  ]},
+  logo:{icon:'🖊️',title:'تصميم الشعار',sub:'شعار احترافي فريد يمثل هوية علامتك التجارية بشكل لا يُنسى',sections:[
+    {t:'أنواع الشعار المشمولة',items:[
+      {t:'الشعار الرمزي (Iconic Logo)',d:'رمز بصري مستقل يعبر عن روح العلامة التجارية بدون كلمات'},
+      {t:'الشعار النصي (Wordmark)',d:'اسم العلامة بخط مميز مُصمم خصيصاً يكون بحد ذاته هوية فريدة'},
+      {t:'الشعار المختصر (Lettermark)',d:'الحروف الأولى من الاسم بتصميم احترافي لأماكن الاستخدام المحدودة'},
+      {t:'الشعار المدمج (Combo Mark)',d:'دمج الرمز مع النص لمرونة أكبر في الاستخدام على مختلف المواد'},
+    ]},
+    {t:'عملية التصميم',items:[
+      {t:'جلسة استيعاب وبحث',d:'فهم عميق لرؤية العلامة، جمهورها، المنافسين، والشخصية المطلوبة'},
+      {t:'مقترحات أولية متعددة',d:'تقديم خيارات بأساليب وتوجهات مختلفة لاختيار الأنسب'},
+      {t:'تعديلات حتى الرضا التام',d:'مراجعات غير محدودة حتى يكون الشعار مثالياً بكل تفاصيله'},
+      {t:'تسليم بجميع الصيغ',d:'AI, EPS, PDF, PNG, SVG بجميع الألوان والخلفيات جاهزة للاستخدام'},
+    ]},
+  ]},
+  brandcolors:{icon:'🎨',title:'نظام الألوان والخطوط',sub:'هوية بصرية متسقة ومتماسكة تعكس شخصية علامتك في كل مكان',sections:[
+    {t:'نظام الألوان',items:[
+      {t:'لوحة الألوان الأساسية',d:'اختيار 2-3 ألوان رئيسية مدروسة تعكس شخصية ومجال العلامة التجارية'},
+      {t:'ألوان مساعدة ومتدرجة',d:'ألوان ثانوية ومتدرجة تتيح تنوعاً في التطبيق دون المساس بالاتساق'},
+      {t:'قيم الألوان الدقيقة',d:'كودات HEX, RGB, CMYK, Pantone لكل لون لضمان الدقة في كل وسيط'},
+      {t:'دليل استخدام الألوان',d:'متى وكيف وأين تستخدم كل لون في المواد الرقمية والمطبوعة'},
+    ]},
+    {t:'Typography – الخطوط',items:[
+      {t:'خط العناوين الرئيسية',d:'خط مميز وجريء يجسّد شخصية العلامة التجارية ويلفت الانتباه'},
+      {t:'خط النص الأساسي',d:'خط مقروء ومريح للعين مناسب للنصوص الطويلة والمحتوى العادي'},
+      {t:'خط الأرقام والمميزات',d:'خط خاص للأرقام والبيانات والنصوص المميزة التي تحتاج التأكيد'},
+      {t:'تعليمات استخدام الخطوط',d:'أحجام وأوزان ومسافات محددة لكل موقف استخدام'},
+    ]},
+    {t:'Moodboard والدليل',items:[
+      {t:'Moodboard الهوية البصرية',d:'لوحة إلهام بصرية تجمع الألوان والخطوط والأنماط في صورة متكاملة'},
+      {t:'Brand Guidelines كامل',d:'دليل شامل ومفصّل لضمان اتساق الهوية في جميع المواد والتطبيقات'},
+      {t:'أمثلة تطبيقية حقيقية',d:'نماذج توضيحية تُظهر كيف تبدو الهوية على المطبوعات والمنصات الرقمية'},
+    ]},
+  ]},
+  brandstrategy:{icon:'🔬',title:'الدراسة والاستراتيجية',sub:'أساس متين لعلامة تجارية ناجحة ومتمايزة في السوق',sections:[
+    {t:'تحليل السوق',items:[
+      {t:'تحليل الجمهور المستهدف',d:'دراسة عميقة لاحتياجات وسلوك وتوقعات ومشاكل جمهورك المستهدف'},
+      {t:'تحليل المنافسين',d:'دراسة شاملة لنقاط القوة والضعف للمنافسين لتحديد فرص التمايز'},
+      {t:'تحليل فجوات السوق',d:'اكتشاف الحاجات غير المُلباة والفرص الذهبية غير المستغلة في السوق'},
+    ]},
+    {t:'جوهر العلامة التجارية',items:[
+      {t:'صياغة الرؤية',d:'الصورة المستقبلية الطموحة التي تسعى إليها العلامة خلال 5-10 سنوات'},
+      {t:'صياغة الرسالة',d:'الغرض الأساسي من وجود العلامة التجارية وما تقدمه للعالم'},
+      {t:'تحديد القيم الجوهرية',d:'المبادئ والقناعات التي تحكم كل قرار وكل تصرف للعلامة التجارية'},
+      {t:'Positioning – استراتيجية التمركز',d:'تحديد المكانة الذهنية المستهدفة في أذهان الجمهور مقارنةً بالمنافسين'},
+    ]},
+    {t:'صوت العلامة التجارية',items:[
+      {t:'تحديد Voice & Tone',d:'الشخصية اللغوية للعلامة وأسلوب التواصل الذي يعكس هويتها'},
+      {t:'Messaging Framework',d:'الرسائل الأساسية والثانوية التي تتواصل بها العلامة مع جمهورها'},
+      {t:'دليل اللغة والنبرة',d:'إرشادات تفصيلية حول كيف تكتب وتتحدث العلامة في كل موقف'},
+    ]},
+  ]},
+  print:{icon:'🖨️',title:'المطبوعات والتغليف',sub:'مواد مطبوعة احترافية تترك انطباعاً راقياً لا يُنسى',sections:[
+    {t:'المطبوعات الرسمية',items:[
+      {t:'بطاقات العمل',d:'تصميم بطاقات عمل احترافية تعكس مكانة علامتك وتترك أثراً عند التسليم'},
+      {t:'الأوراق الرسمية Letterhead',d:'ورق مكاتبات رسمي بتصميم متسق مع الهوية البصرية للعلامة'},
+      {t:'الأظرف والمغلفات',d:'أظرف مطبوعة للمراسلات الرسمية تعكس احترافية علامتك في كل تفاصيلها'},
+      {t:'ملفات العروض',d:'مجلدات احترافية لتقديم عروضك ووثائقك بصورة تليق بمكانتك'},
+    ]},
+    {t:'تصميم التغليف',items:[
+      {t:'تصميم Packaging كامل',d:'تغليف منتجاتك بتصميم يعكس الجودة ويميز علامتك على رفوف المتاجر'},
+      {t:'تصميم الأكياس والعلب',d:'تصميم متكامل للأكياس والعلب وأغطية المنتجات بهوية موحدة'},
+      {t:'تصميم الملصقات Labels',d:'ملصقات جذابة للمنتجات تحمل المعلومات الضرورية بتصميم احترافي'},
+    ]},
+  ]},
+  brandexp:{icon:'📖',title:'تجربة العلامة التجارية',sub:'احكِ قصة علامتك وابنِ تجربة عميل استثنائية لا تُنسى',sections:[
+    {t:'Brand Storytelling',items:[
+      {t:'قصة العلامة التجارية',d:'سرد قصة مقنعة وعاطفية تبني رابطاً حقيقياً بين جمهورك وعلامتك'},
+      {t:'About Us الاحترافي',d:'صياغة قسم "من نحن" يعكس قيم وشخصية العلامة بشكل مؤثر ومقنع'},
+      {t:'محتوى تسويقي ملهم',d:'محتوى يروي كيف تحل علامتك مشاكل جمهورها وتغير حياتهم'},
+    ]},
+    {t:'تجربة العميل',items:[
+      {t:'رسم خريطة رحلة العميل',d:'توثيق كل نقطة تماس بين العميل والعلامة من أول لقاء حتى ما بعد الشراء'},
+      {t:'تحسين نقاط التماس',d:'ضمان تجربة إيجابية ومتسقة ومبهجة في كل مرحلة من رحلة العميل'},
+      {t:'بروتوكول خدمة العملاء',d:'إرشادات تفصيلية للتعامل مع العملاء تعكس قيم ورقي العلامة'},
+      {t:'بناء ولاء العملاء',d:'استراتيجيات لتحويل العملاء إلى مدافعين ومروّجين طوعيين للعلامة'},
+    ]},
+  ]},
+  webmgmt:{icon:'💻',title:'إدارة الموقع وتجربة المستخدم',sub:'موقع سريع وجذاب يحول الزوار إلى عملاء حقيقيين',sections:[
+    {t:'إدارة الموقع',items:[
+      {t:'تحديث المحتوى والمنتجات',d:'إضافة وتعديل وحذف المحتوى والمنتجات والصفحات بشكل منتظم وسريع'},
+      {t:'مراقبة الأداء التقني',d:'متابعة مستمرة لسرعة الموقع وحالة الخوادم والإشعار الفوري بأي مشكلة'},
+      {t:'إدارة الإضافات والتحديثات',d:'تحديث النظام والإضافات لضمان الأمان والأداء الأمثل في كل وقت'},
+    ]},
+    {t:'تجربة المستخدم',items:[
+      {t:'تحليل سلوك المستخدمين',d:'فهم عميق لكيفية تفاعل الزوار مع موقعك لتحسين تجربتهم'},
+      {t:'تحسين سهولة التنقل',d:'Navigation واضح وبديهي يوصل المستخدم لهدفه بأقل جهد وأسرع وقت'},
+      {t:'توافق تام مع الجوال',d:'تجربة مثالية على جميع الأجهزة والشاشات بمختلف أحجامها'},
+      {t:'تحسين Accessibility',d:'الموقع قابل للاستخدام من قِبل جميع المستخدمين بما فيهم ذوو الاحتياجات الخاصة'},
+    ]},
+  ]},
+  payment:{icon:'💳',title:'بوابات الدفع الإلكتروني',sub:'تفعيل وإعداد جميع وسائل الدفع لتجربة شراء سلسة',sections:[
+    {t:'وسائل الدفع المحلية',items:[
+      {t:'مدى',d:'تفعيل الدفع بالبطاقات المدينة السعودية عبر شبكة مدى الآمنة والموثوقة'},
+      {t:'STC Pay',d:'تفعيل محفظة STC Pay للدفع الفوري السريع دون الحاجة لإدخال بيانات'},
+      {t:'Apple Pay',d:'تفعيل Apple Pay للدفع بلمسة واحدة عبر iPhone وApple Watch'},
+    ]},
+    {t:'وسائل الدفع الدولية',items:[
+      {t:'Visa & MasterCard',d:'تفعيل الدفع بجميع أنواع البطاقات الائتمانية والمدينة الدولية'},
+      {t:'PayPal',d:'تفعيل PayPal لاستقبال مدفوعات من عملاء محليين ودوليين'},
+      {t:'Tabby & Tamara',d:'تفعيل خيارات الدفع على أقساط لزيادة قدرة الشراء لدى العملاء'},
+    ]},
+    {t:'الإعداد والتكامل',items:[
+      {t:'ضبط إعدادات الدفع',d:'إعداد العملات والضرائب والشحن وخيارات الدفع بشكل دقيق وصحيح'},
+      {t:'اختبار شامل للبوابات',d:'التأكد من عمل جميع وسائل الدفع بكفاءة تامة قبل الإطلاق'},
+      {t:'دمج مع نظام الأوردرات',d:'ربط تلقائي كامل بين الدفع ونظام الطلبات والمخزون والشحن'},
+    ]},
+  ]},
+  security:{icon:'🔒',title:'أمان الموقع',sub:'حماية موقعك وبيانات عملائك من التهديدات الإلكترونية',sections:[
+    {t:'شهادات الأمان',items:[
+      {t:'SSL Certificate',d:'تشفير جميع الاتصالات بين المستخدم والموقع بشهادة SSL معتمدة ومُحدَّثة'},
+      {t:'HTTPS للموقع كاملاً',d:'ضمان أن جميع صفحات الموقع تعمل بـ HTTPS وليس HTTP'},
+      {t:'تجديد الشهادات تلقائياً',d:'تجديد شهادات SSL قبل انتهائها لضمان الاستمرارية وتجنب تحذيرات المتصفح'},
+    ]},
+    {t:'PCI Compliance',items:[
+      {t:'الامتثال لمعايير PCI DSS',d:'ضمان معالجة بيانات بطاقات الدفع وفق أعلى معايير الأمان الدولية'},
+      {t:'حماية بيانات الدفع',d:'عدم تخزين أرقام البطاقات وتشفير جميع بيانات الدفع الحساسة'},
+      {t:'تدقيق أمني دوري',d:'فحص منتظم للثغرات الأمنية في صفحات الدفع والبيانات الحساسة'},
+    ]},
+    {t:'الحماية الشاملة',items:[
+      {t:'Firewall متقدم',d:'جدار حماية قوي يمنع الهجمات الإلكترونية والوصول غير المصرح به'},
+      {t:'الحماية من Malware',d:'فحص يومي للموقع للكشف عن أي برمجيات خبيثة فور ظهورها'},
+      {t:'حماية بيانات العملاء',d:'تشفير وحماية قاعدة البيانات الكاملة للعملاء والطلبات والمعاملات'},
+    ]},
+  ]},
+};
 
-  // Calculate and show discount %
-  document.querySelectorAll('.price-row').forEach(row => {
-    const curr = row.querySelector('.price-current');
-    const orig = row.querySelector('.price-original');
-    const badge = row.querySelector('.discount-badge');
-    if (curr && orig && badge) {
-      const c = parseFloat(curr.textContent.replace(/[^0-9.]/g,''));
-      const o = parseFloat(orig.textContent.replace(/[^0-9.]/g,''));
-      if (c && o) {
-        const pct = Math.round((1 - c/o)*100);
-        badge.textContent += ` (${pct}%)`;
-      }
-    }
+function openModal(key){
+  const s=SVC[key];if(!s)return;
+  let h=`<div class="modal-header"><span class="modal-icon-big">${s.icon}</span><div class="modal-title">${s.title}</div><div class="modal-subtitle">${s.sub}</div></div>`;
+  s.sections.forEach(sec=>{
+    h+=`<div class="modal-section"><div class="modal-section-title">${sec.t}</div><ul class="modal-items">`;
+    sec.items.forEach(it=>{h+=`<li><span class="chk">✓</span><div class="itxt"><strong>${it.t}</strong><span>${it.d}</span></div></li>`;});
+    h+=`</ul></div>`;
   });
+  document.getElementById('modalContent').innerHTML=h;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';}
+function closeBg(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 </script>
 </body>
 </html>
